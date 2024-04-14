@@ -12,4 +12,5 @@ public:
     using Result = std::variant<Pending, Done, Error>;
 
     virtual Result step(uint8_t input) = 0;
+    virtual Token produce_result() = 0;
 };

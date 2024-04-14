@@ -18,9 +18,9 @@ public:
 
     Result step(uint8_t raw_input) override;       
 
-    void update(auto state);
+    Token produce_result() override;
 
-    Token produce_result();
+    void update(auto state);
 
 private:
     uint64_t whole = 0;
