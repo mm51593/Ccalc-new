@@ -74,7 +74,12 @@ NumericTokenizer::Result get_result(NumericTokenizer *tknzr, Invalid old_state,
 }
 NumericTokenizer::Result get_result(NumericTokenizer *tknzr, auto old_state,
                                     Invalid new_state) {
-  return NumericTokenizer::Done{tknzr->produce_result()};
+  auto res = tknzr->produce_result();
+  if (res.has_value()) {
+    return NumericTokenizer::Done{res.value()};
+  } else {
+    return NumericTokenizer::Error{};
+  }
 }
 NumericTokenizer::Result get_result(NumericTokenizer *tknzr, auto old_state,
                                     auto new_state) {
@@ -83,7 +88,7 @@ NumericTokenizer::Result get_result(NumericTokenizer *tknzr, auto old_state,
 
 //////////////////////////////////////////
 
-Token NumericTokenizer::produce_result() {
+std::optional<Token> NumericTokenizer::produce_result() {
   uint64_t base = RADIX;
 
   while (this->decimal > base) {

@@ -18,7 +18,7 @@ public:
 
     Result step(uint8_t raw_input) override;       
 
-    Token produce_result() override;
+    std::optional<Token> produce_result() override;
 
     void update(auto state);
 
