@@ -2,7 +2,6 @@
 
 #include <cctype>
 #include <cstdint>
-#include <iostream>
 #include <variant>
 
 #define RADIX 10
