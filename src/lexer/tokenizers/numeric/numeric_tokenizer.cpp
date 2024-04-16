@@ -98,14 +98,14 @@ NumericTokenizer::Result NumericTokenizer::step(uint8_t raw_input) {
   Input input = NumericInput::from(raw_input);
 
   auto next_state = std::visit(
-      [this](auto real_current_state, auto real_input) {
+      [](auto real_current_state, auto real_input) {
         auto next_state = transition(real_current_state, real_input);
         return next_state;
       },
       this->state, input);
 
   auto res = std::visit(
-      [this, next_state](auto old_state, auto new_state) {
+      [next_state](auto old_state, auto new_state) {
         return get_result(old_state, new_state);
       },
       this->state, next_state);

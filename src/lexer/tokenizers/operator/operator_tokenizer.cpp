@@ -89,13 +89,13 @@ OperatorTokenizer::Result OperatorTokenizer::step(uint8_t raw_input) {
   Input input = OperatorInput::from(raw_input);
 
   auto next_state = std::visit(
-      [this](auto real_current_state, auto real_input) {
+      [](auto real_current_state, auto real_input) {
         return transition(real_current_state, real_input);
       },
       this->state, input);
 
   auto res = std::visit(
-      [this, next_state](auto real_old_state, auto real_new_state) {
+      [next_state](auto real_old_state, auto real_new_state) {
         return get_result(real_old_state, real_new_state);
       },
       this->state, next_state);
