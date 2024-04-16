@@ -4,7 +4,6 @@
 
 #include <array>
 #include <cstdint>
-#include <optional>
 #include <variant>
 
 #define MAX_LENGTH 2 
