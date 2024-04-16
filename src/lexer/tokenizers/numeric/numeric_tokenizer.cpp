@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <variant>
 #include <optional>
+#include <cmath>
 
 #define RADIX 10
 
@@ -36,24 +37,25 @@ namespace NumericInput {
 
 //////////////////////////////////////////
 
-NumericTokenizer::State transition(Initial state, Digit input) {
+NumericTokenizer::State transition(Initial &state, Digit input) {
   return Whole{.w = input.x};
 }
-NumericTokenizer::State transition(Initial state, DecimalPoint input) {
+NumericTokenizer::State transition(Initial &state, DecimalPoint input) {
   return Decimal{};
 }
-NumericTokenizer::State transition(Whole state, Digit input) {
+NumericTokenizer::State transition(Whole &state, Digit input) {
   state.w = state.w * RADIX + input.x;
   return state;
 }
-NumericTokenizer::State transition(Whole state, DecimalPoint input) {
-  return Decimal{ .w = state.w };
+NumericTokenizer::State transition(Whole &state, DecimalPoint input) {
+  return Decimal{ .w = state.w};
 }
-NumericTokenizer::State transition(Decimal state, Digit input) {
+NumericTokenizer::State transition(Decimal &state, Digit input) {
   state.d = state.d * RADIX + input.x;
+  state.count++;
   return state;
 }
-NumericTokenizer::State transition(auto state, auto input) { return Invalid{}; }
+NumericTokenizer::State transition(auto &state, auto input) { return Invalid{}; }
 
 //////////////////////////////////////////
 
@@ -61,11 +63,7 @@ std::optional<Token> produce_result(Whole final_state) {
   return NumericToken{.value = (double) final_state.w};
 }
 std::optional<Token> produce_result(Decimal final_state) {
-  uint64_t base = RADIX;
-
-  while (final_state.d > base) {
-    base *= RADIX;
-  }
+  uint64_t base = pow(RADIX, final_state.count);
 
   return NumericToken{.value = final_state.w + (double)final_state.d / base};
 }
