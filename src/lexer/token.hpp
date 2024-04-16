@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <variant>
 
 struct NumericToken {
@@ -36,4 +37,8 @@ struct KeywordToken {
   KeywordType type;
 };
 
-using Token = std::variant<NumericToken, OperatorToken, KeywordToken>;
+struct IdentifierToken {
+  std::string name;
+};
+
+using Token = std::variant<NumericToken, OperatorToken, KeywordToken, IdentifierToken>;
