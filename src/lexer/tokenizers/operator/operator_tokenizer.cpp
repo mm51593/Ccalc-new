@@ -17,22 +17,22 @@ struct ValidChar {
 using Input = std::variant<ValidChar, std::monostate>;
 
 namespace OperatorInput {
-  Input from(uint8_t raw_input) {
-    bool is_valid = false;
-    for (uint8_t c : VALID_CHARS) {
-      if (raw_input == c) {
-        is_valid = true;
-        break;
-      }
-    }
-
-    if (is_valid) {
-      return ValidChar{.c = raw_input};
-    } else {
-      return std::monostate();
+Input from(uint8_t raw_input) {
+  bool is_valid = false;
+  for (uint8_t c : VALID_CHARS) {
+    if (raw_input == c) {
+      is_valid = true;
+      break;
     }
   }
+
+  if (is_valid) {
+    return ValidChar{.c = raw_input};
+  } else {
+    return std::monostate();
+  }
 }
+} // namespace OperatorInput
 
 //////////////////////////////////////////
 
@@ -55,61 +55,48 @@ OperatorTokenizer::State transition(auto state, auto input) {
 
 //////////////////////////////////////////
 
-template <> void OperatorTokenizer::update(Valid state) {
-  this->op_text[state.idx - 1] = state.text[state.idx - 1];
-}
-void OperatorTokenizer::update(auto state) {}
-
-//////////////////////////////////////////
-
-OperatorTokenizer::Result get_result(OperatorTokenizer *tknzr,
-                                     Initial old_state, Invalid new_state) {
-  return OperatorTokenizer::Error{};
-}
-OperatorTokenizer::Result get_result(OperatorTokenizer *tknzr,
-                                     Invalid old_state, Invalid new_state) {
-  return OperatorTokenizer::Error{};
-}
-OperatorTokenizer::Result get_result(OperatorTokenizer *tknzr, Valid old_state,
-                                     Invalid new_state) {
-  if (auto res = tknzr->produce_result(); res.has_value()) {
-    return OperatorTokenizer::Done{res.value()};
-  } else {
-    return OperatorTokenizer::Error{};
-  }
-}
-OperatorTokenizer::Result get_result(OperatorTokenizer *tknzr, auto old_state,
-                                     auto new_state) {
-  return OperatorTokenizer::Pending{};
-}
-
-//////////////////////////////////////////
-
-std::optional<Token> OperatorTokenizer::produce_result() {
-  for (auto& [t, o] : OP_MAPPINGS) {
-    if (this->op_text == t) {
+std::optional<Token> produce_result(Valid final_state) {
+  for (auto &[t, o] : OP_MAPPINGS) {
+    if (final_state.text == t) {
       return OperatorToken{o};
     }
   }
   return std::nullopt;
 }
 
+//////////////////////////////////////////
+
+OperatorTokenizer::Result get_result(Initial old_state, Invalid new_state) {
+  return OperatorTokenizer::Error{};
+}
+OperatorTokenizer::Result get_result(Invalid old_state, Invalid new_state) {
+  return OperatorTokenizer::Error{};
+}
+OperatorTokenizer::Result get_result(Valid old_state, Invalid new_state) {
+  if (auto res = produce_result(old_state); res.has_value()) {
+    return OperatorTokenizer::Done{res.value()};
+  } else {
+    return OperatorTokenizer::Error{};
+  }
+}
+OperatorTokenizer::Result get_result(auto old_state, auto new_state) {
+  return OperatorTokenizer::Pending{};
+}
+
+//////////////////////////////////////////
+
 OperatorTokenizer::Result OperatorTokenizer::step(uint8_t raw_input) {
   Input input = OperatorInput::from(raw_input);
 
   auto next_state = std::visit(
       [this](auto real_current_state, auto real_input) {
-        auto next_state = transition(real_current_state, real_input);
-        std::visit(
-            [this](auto real_next_state) { this->update(real_next_state); },
-            next_state);
-        return next_state;
+        return transition(real_current_state, real_input);
       },
       this->state, input);
 
   auto res = std::visit(
       [this, next_state](auto real_old_state, auto real_new_state) {
-        return get_result(this, real_old_state, real_new_state);
+        return get_result(real_old_state, real_new_state);
       },
       this->state, next_state);
 

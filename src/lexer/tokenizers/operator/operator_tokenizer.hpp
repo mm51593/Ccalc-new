@@ -45,11 +45,4 @@ public:
   State state = Initial{};
 
   Result step(uint8_t raw_input) override;
-
-  std::optional<Token> produce_result() override;
-
-  void update(auto state);
-
-private:
-  std::array<uint8_t, MAX_LENGTH + 1> op_text;
 };
