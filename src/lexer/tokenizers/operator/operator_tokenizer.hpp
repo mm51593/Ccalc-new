@@ -6,13 +6,13 @@
 #include <cstdint>
 #include <variant>
 
-#define MAX_LENGTH 2 
 #define VALID_CHARS "+-*/=!<>"
 
-static_assert(MAX_LENGTH > 0);
+const uint8_t OP_MAX_LENGTH = 2;
+static_assert(OP_MAX_LENGTH > 0);
 
 struct OpMapping {
-  std::array<uint8_t, MAX_LENGTH + 1> text;
+  std::array<uint8_t, OP_MAX_LENGTH + 1> text;
   OperatorToken::OperatorType type;
 };
 
@@ -34,7 +34,7 @@ class OperatorTokenizer : public Tokenizer {
 public:
   struct Initial {};
   struct Valid {
-    std::array<uint8_t, MAX_LENGTH + 1> text = {0};
+    std::array<uint8_t, OP_MAX_LENGTH + 1> text = {0};
     uint8_t idx = 0;
   };
   struct Invalid {};

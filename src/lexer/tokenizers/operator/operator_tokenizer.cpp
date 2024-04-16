@@ -42,7 +42,7 @@ OperatorTokenizer::State transition(Initial &state, ValidChar &input) {
   return ret;
 }
 OperatorTokenizer::State transition(Valid &state, ValidChar &input) {
-  if (state.idx < MAX_LENGTH) {
+  if (state.idx < OP_MAX_LENGTH) {
     state.text[state.idx++] = input.c;
     return state;
   } else {

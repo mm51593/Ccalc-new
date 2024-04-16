@@ -5,6 +5,7 @@
 struct NumericToken {
   double value = 0;
 };
+
 struct OperatorToken {
   enum class OperatorType {
     Add,
