@@ -36,12 +36,12 @@ Input from(uint8_t raw_input) {
 
 //////////////////////////////////////////
 
-OperatorTokenizer::State transition(Initial state, ValidChar input) {
+OperatorTokenizer::State transition(Initial &state, ValidChar &input) {
   Valid ret;
   ret.text[ret.idx++] = input.c;
   return ret;
 }
-OperatorTokenizer::State transition(Valid state, ValidChar input) {
+OperatorTokenizer::State transition(Valid &state, ValidChar &input) {
   if (state.idx < MAX_LENGTH) {
     state.text[state.idx++] = input.c;
     return state;
@@ -49,7 +49,7 @@ OperatorTokenizer::State transition(Valid state, ValidChar input) {
     return Invalid{};
   }
 }
-OperatorTokenizer::State transition(auto state, auto input) {
+OperatorTokenizer::State transition(auto &state, auto &input) {
   return Invalid{};
 }
 
