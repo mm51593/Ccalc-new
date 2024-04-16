@@ -23,4 +23,17 @@ struct OperatorToken {
   OperatorType type;
 };
 
-using Token = std::variant<NumericToken, OperatorToken>;
+struct KeywordToken {
+  enum class KeywordType {
+    If,
+    Else,
+    Then,
+    Begin,
+    End,
+    While,
+    Func,
+  };
+  KeywordType type;
+};
+
+using Token = std::variant<NumericToken, OperatorToken, KeywordToken>;
