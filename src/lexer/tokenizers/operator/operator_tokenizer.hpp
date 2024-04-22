@@ -6,7 +6,8 @@
 #include <cstdint>
 #include <variant>
 
-#define VALID_CHARS "+-*/=!<>"
+const std::array<uint8_t, 8> VALID_CHARS = {'+', '-', '*', '/',
+                                            '=', '!', '<', '>'};
 
 const uint8_t OP_MAX_LENGTH = 2;
 static_assert(OP_MAX_LENGTH > 0);
