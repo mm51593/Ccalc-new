@@ -41,4 +41,6 @@ struct IdentifierToken {
   std::string name;
 };
 
-using Token = std::variant<NumericToken, OperatorToken, KeywordToken, IdentifierToken>;
+struct WhitespaceToken {};
+
+using Token = std::variant<NumericToken, OperatorToken, KeywordToken, IdentifierToken, WhitespaceToken>;
