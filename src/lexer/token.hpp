@@ -4,7 +4,7 @@
 #include <variant>
 
 struct NumericToken {
-  double value = 0;
+   double value = 0;
 };
 
 struct OperatorToken {
@@ -21,7 +21,7 @@ struct OperatorToken {
     LTE,
     GTE
   };
-  OperatorType type;
+   OperatorType type;
 };
 
 struct KeywordToken {
@@ -34,11 +34,12 @@ struct KeywordToken {
     While,
     Func,
   };
-  KeywordType type;
+   KeywordType type;
 };
 
 struct IdentifierToken {
-  std::string name;
+   std::string name;
 };
 
-using Token = std::variant<NumericToken, OperatorToken, KeywordToken, IdentifierToken>;
+using Token =
+    std::variant<NumericToken, OperatorToken, KeywordToken, IdentifierToken>;
