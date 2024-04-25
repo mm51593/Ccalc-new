@@ -19,7 +19,9 @@ struct OperatorToken {
     LT,
     GT,
     LTE,
-    GTE
+    GTE,
+    LParen,
+    RParen
   };
    OperatorType type;
 };

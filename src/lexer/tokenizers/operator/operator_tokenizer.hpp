@@ -6,8 +6,8 @@
 #include <cstdint>
 #include <variant>
 
-const std::array<uint8_t, 8> VALID_CHARS = {'+', '-', '*', '/',
-                                            '=', '!', '<', '>'};
+const std::array<uint8_t, 10> VALID_CHARS = {'+', '-', '*', '/', '=',
+                                             '!', '<', '>', '(', ')'};
 
 const uint8_t OP_MAX_LENGTH = 2;
 static_assert(OP_MAX_LENGTH > 0);
@@ -29,6 +29,8 @@ const OpMapping OP_MAPPINGS[] = {
     {">", OperatorToken::OperatorType::GT},
     {"<=", OperatorToken::OperatorType::LTE},
     {">=", OperatorToken::OperatorType::GTE},
+    {"(", OperatorToken::OperatorType::LParen},
+    {")", OperatorToken::OperatorType::RParen},
 };
 
 class OperatorTokenizer : public Tokenizer {
