@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <istream>
+#include <optional>
+#include <string>
 
 int main(int argc, char *argv[]) {
   std::ifstream fd;
@@ -15,12 +17,13 @@ int main(int argc, char *argv[]) {
   }()
       : std::cin;
 
-  Reader rd(file); 
-  auto it = rd.begin();
+  Reader rd(file);
+  std::optional<std::string> line;
 
   do {
-    if ((*(++it)).has_value()) {
-      std::cout << (*it).value() << '\n';
+    line = rd.next();
+    if (line.has_value()) {
+      std::cout << line.value() << '\n';
     }
-  } while ((*it).has_value());
+  } while (line.has_value());
 }
