@@ -4,31 +4,13 @@
 #include <optional>
 #include <string>
 
-//////////////////////////////////////////
+Reader::Reader(std::istream &file) : file(file) {}
 
-Reader::Iterator::Iterator(std::istream &file) : file(file) {}
-
-std::optional<std::string> Reader::Iterator::operator*() {
+std::optional<std::string> Reader::next() {
   if (!this->file) {
     return std::nullopt;
   }
-  return this->line;
+  std::string line;
+  std::getline(this->file, line);
+  return line;
 }
-
-Reader::Iterator Reader::Iterator::operator++() {
-  this->get_next();
-  return *this;
-}
-Reader::Iterator Reader::Iterator::operator++(int) {
-  Reader::Iterator tmp = *this;
-  ++(*this);
-  return tmp;
-}
-
-void Reader::Iterator::get_next() { std::getline(this->file, this->line); }
-
-//////////////////////////////////////////
-
-Reader::Reader(std::istream &file) : file(file) {}
-
-Reader::Iterator Reader::begin() { return Iterator(this->file); }
