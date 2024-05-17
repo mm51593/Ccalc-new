@@ -16,11 +16,8 @@ int main(int argc, char *argv[]) {
       : std::cin;
 
   Reader rd(file); 
-  auto it = rd.begin();
 
-  do {
-    if ((*(++it)).has_value()) {
-      std::cout << (*it).value() << '\n';
-    }
-  } while ((*it).has_value());
+  while ((*rd).has_value()) {
+    std::cout << (*(rd++)).value();
+  }
 }
