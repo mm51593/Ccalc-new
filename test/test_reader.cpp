@@ -1,6 +1,5 @@
 #include "../src/reader/reader.hpp"
 
-#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
