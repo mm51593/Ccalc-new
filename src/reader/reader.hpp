@@ -4,15 +4,8 @@
 
 class Reader {
 public:
-  struct ReaderRet {
-    std::optional<uint8_t> val;
-    std::optional<uint8_t> operator*();
-  };
-
   Reader(std::istream &file);
-  std::optional<uint8_t> operator*();
-  ReaderRet operator++();
-  ReaderRet operator++(int);
+  std::optional<uint8_t> next(); 
 
 private:
   struct LineLoader {
