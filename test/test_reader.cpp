@@ -1,5 +1,6 @@
 #include "../src/reader/reader.hpp"
 
+#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -17,7 +18,7 @@ int main(int argc, char *argv[]) {
 
   Reader rd(file); 
 
-  while ((*rd).has_value()) {
-    std::cout << (*(rd++)).value();
+  while (uint8_t c = rd.next().value_or(0)) {
+    std::cout << c;
   }
 }
