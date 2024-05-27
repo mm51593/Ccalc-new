@@ -4,6 +4,10 @@
 #include <optional>
 #include <string>
 
+std::optional<uint8_t> Reader::ReaderRet::operator*() {
+  return this->val;
+}
+
 //////////////////////////////////////////
 
 Reader::LineLoader::LineLoader(Reader &rd) : rd(rd) {}
@@ -36,7 +40,7 @@ void Reader::LineLoader::get_next_line() {
 
 Reader::Reader(std::istream &file) : file(file) {}
 
-std::optional<uint8_t> Reader::next() {
+std::optional<uint8_t> Reader::operator*() {
   while ((*this->ll).has_value() && this->it == (*this->ll).value().end()) {
     ++(this->ll);
   }
@@ -44,6 +48,14 @@ std::optional<uint8_t> Reader::next() {
   if (!(*this->ll).has_value()) {
     return std::nullopt;
   } else {
-    return *this->it++;
+    return *this->it;
   }
+}
+
+Reader::ReaderRet Reader::operator++() {
+  return ReaderRet { *(++this->it) };
+}
+
+Reader::ReaderRet Reader::operator++(int) {
+  return ReaderRet { *(this->it++) };
 }
