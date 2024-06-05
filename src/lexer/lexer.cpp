@@ -3,6 +3,7 @@
 #include "tokenizers/tokenizer.hpp"
 
 #include <cstdint>
+#include <optional>
 #include <tuple>
 #include <variant>
 #include <vector>
@@ -63,10 +64,11 @@ void Lexer::tokenizer_loop(Tokenizers &tokenizers,
 
     feed_tokenizers(c, results, results_index, tokenizers);
     should_loop = sort_results(products, results);
+    if (should_loop) this->rd++;
   } while (should_loop);
 }
 
-Token Lexer::next() {
+std::optional<Token> Lexer::tokenize() {
   Tokenizers tokenizers = this->tokenizers_template;
 
   std::vector<Token> products;
@@ -74,5 +76,25 @@ Token Lexer::next() {
 
   tokenizer_loop(tokenizers, products);
 
-  return products.back();
+  if (products.size()) {
+    return products.back();
+  } else {
+    return std::nullopt;
+  }
 }
+
+//////////////////////////////////////////
+
+std::optional<Token> Lexer::operator*() {
+  if (!this->tkn.has_value()) {
+    this->tkn = this->tokenize();
+  }
+
+  return this->tkn;
+}
+
+Lexer &Lexer::operator++() {
+  this->tkn = std::nullopt;
+  return *this;
+}
+
